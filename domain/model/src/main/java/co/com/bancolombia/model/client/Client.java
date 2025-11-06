@@ -1,12 +1,11 @@
 package co.com.bancolombia.model.client;
+
 import co.com.bancolombia.model.pet.Pet;
-import lombok.Builder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,8 +15,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class Client {
 
-    private Long id;
-
     private String name;
 
     private String lastName;
@@ -26,9 +23,7 @@ public class Client {
 
     private String email;
 
-    String address;
+    private String address;
 
     private List<Pet> pets;
-
-    LocalDateTime createdDate;
 }
