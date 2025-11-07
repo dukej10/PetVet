@@ -15,7 +15,7 @@ implements ClientRepository
 {
 
     public ClientRepositoryAdapter(ClientDataRepository repository, ObjectMapper mapper) {
-        super(repository, mapper, d -> mapper.map(d, Client.class/* change for domain model */));
+        super(repository, mapper, d -> mapper.map(d, Client.class));
     }
 
     @Override
