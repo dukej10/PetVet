@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -14,6 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Client {
+
+    private Long id;
 
     private String name;
 
@@ -26,4 +30,6 @@ public class Client {
     private String address;
 
     private List<Pet> pets;
+
+    private LocalDateTime createdDate;
 }

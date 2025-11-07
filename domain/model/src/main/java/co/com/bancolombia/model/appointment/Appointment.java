@@ -1,7 +1,8 @@
 package co.com.bancolombia.model.appointment;
+
 import co.com.bancolombia.model.pet.Pet;
-import lombok.Builder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
