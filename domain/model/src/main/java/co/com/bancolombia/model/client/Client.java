@@ -32,4 +32,6 @@ public class Client {
     private List<Pet> pets;
 
     private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
 }

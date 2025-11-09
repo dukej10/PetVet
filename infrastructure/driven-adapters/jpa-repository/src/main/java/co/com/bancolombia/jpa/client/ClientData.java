@@ -49,6 +49,9 @@ public class ClientData {
     @Column(name= "created_at")
     LocalDateTime createdDate;
 
+    @Column(name= "updated_at")
+    LocalDateTime updatedDate;
+
     @PrePersist
     public void prePersist() {
         createdDate = LocalDateTime.now();
