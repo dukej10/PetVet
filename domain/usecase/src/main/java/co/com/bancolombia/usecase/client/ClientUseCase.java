@@ -2,7 +2,10 @@ package co.com.bancolombia.usecase.client;
 
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
+import co.com.bancolombia.model.exceptions.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+
 
 import java.util.List;
 
@@ -14,24 +17,44 @@ public class ClientUseCase {
         try {
             return repository.saveClient(client);
         } catch (Exception ex) {
-            return null;
+            throw new NoDataFoundException();
         }
     }
 
     public Client updatedClient(Client client) {
         try {
-            return repository.saveClient(client);
+            Client clientFound = getById(client.getId());
+            if (clientFound != null) {
+                clientFound.setUpdatedDate(LocalDateTime.now());
+                return repository.saveClient(clientFound);
+            }else {
+                throw new NoDataFoundException();
+
+            }
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            throw new NoDataFoundException();
         }
     }
 
-    public Client getById(Long id) {
-        return repository.findById(id);
+    public Client  getById(Long id) {
+       try {
+           Client client = repository.findById(id);
+           if(client != null) {
+               return client;
+           }
+           throw new NoDataFoundException();
+       } catch (Exception ex) {
+           throw new NoDataFoundException();
+       }
     }
 
     public List<Client> getAllClients() {
-        return repository.getAll();
+        try {
+            return repository.getAll();
+
+        } catch (Exception e) {
+            throw new NoDataFoundException();
+        }
     }
 
 }
