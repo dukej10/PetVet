@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,15 @@ public class AppointmentData {
     @Column(length = 15, nullable = false)
     private String state;
 
+    @Column(name= "created_at")
+    LocalDateTime createdDate;
 
+    @Column(name= "updated_at")
+    LocalDateTime updatedDate;
+
+    @PrePersist
+    public void prePersist() {
+        createdDate = LocalDateTime.now();
+    }
 
 }

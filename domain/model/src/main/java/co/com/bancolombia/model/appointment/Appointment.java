@@ -25,4 +25,8 @@ public class Appointment {
     private String reason;
 
     private String state;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
 }

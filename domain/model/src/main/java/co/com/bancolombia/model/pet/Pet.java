@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -35,4 +36,8 @@ public class Pet {
     private LocalDate bornDate;
 
     private String gender;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
 }
