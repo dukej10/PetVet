@@ -2,6 +2,7 @@ package co.com.bancolombia.usecase.client;
 
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
+import co.com.bancolombia.model.exceptions.GeneralException;
 import co.com.bancolombia.model.exceptions.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
@@ -17,22 +18,17 @@ public class ClientUseCase {
         try {
             return repository.saveClient(client);
         } catch (Exception ex) {
-            throw new NoDataFoundException();
+            throw new GeneralException("Error al guardar el cliente");
         }
     }
 
     public Client updatedClient(Client client) {
         try {
             Client clientFound = getById(client.getId());
-            if (clientFound != null) {
-                clientFound.setUpdatedDate(LocalDateTime.now());
-                return repository.saveClient(clientFound);
-            }else {
-                throw new NoDataFoundException();
-
-            }
+            clientFound.setUpdatedDate(LocalDateTime.now());
+            return repository.saveClient(clientFound);
         } catch (Exception ex) {
-            throw new NoDataFoundException();
+            throw new GeneralException("Error al actualizar el cliente");
         }
     }
 
@@ -44,16 +40,15 @@ public class ClientUseCase {
            }
            throw new NoDataFoundException();
        } catch (Exception ex) {
-           throw new NoDataFoundException();
+           throw new GeneralException("Error al obtener el cliente");
        }
     }
 
     public List<Client> getAllClients() {
         try {
             return repository.getAll();
-
         } catch (Exception e) {
-            throw new NoDataFoundException();
+            throw new GeneralException("Error al obtener los cliente");
         }
     }
 

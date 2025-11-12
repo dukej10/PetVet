@@ -1,5 +1,6 @@
 package co.com.bancolombia.api.exceptions;
 
+import co.com.bancolombia.model.exceptions.NoDataFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -62,8 +63,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     // 3️⃣ Manejo de excepciones personalizadas
-    /*
-    @ExceptionHandler({ResourceNotFoundException.class, MissingDataException.class})
+    @ExceptionHandler({NoDataFoundException.class, NoDataFoundException.class})
     public ResponseEntity<ErrorResponse> handleCustomException(
             RuntimeException ex, WebRequest request) {
 
@@ -77,7 +77,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
-    */
 
     // 4️⃣ Manejo de cualquier otra excepción global
     @ExceptionHandler(Exception.class)

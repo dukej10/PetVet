@@ -2,10 +2,13 @@ package co.com.bancolombia.usecase.pet;
 
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.model.client.gateways.ClientRepository;
+import co.com.bancolombia.model.exceptions.GeneralException;
+import co.com.bancolombia.model.exceptions.NoDataFoundException;
 import co.com.bancolombia.model.pet.Pet;
 import co.com.bancolombia.model.pet.gateways.PetRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -16,31 +19,47 @@ public class PetUseCase {
 
     public Pet savePet(Pet pet, Long idClient) {
         try {
-            Client client = clientRepository.findById(idClient);
-            if(client != null){
+                Client client = getClientById(idClient);
                 pet.setClient(client);
                 return repository.savePet(pet);
-
-            }
-            return null;
-        } catch (Exception ex) {
-            return null;
+            } catch (Exception ex) {
+            throw new GeneralException("Error al guardar la mascota");
         }
     }
 
-    public Pet updatedPet(Pet pet) {
+    private Client getClientById(Long idClient) {
+        Client client = clientRepository.findById(idClient);
+        if (client == null) {
+            throw new NoDataFoundException();
+        }
+        return client;
+    }
+
+    public Pet updatedPet(Pet pet, Long idClient) {
         try {
+            Pet petFound = getById(pet.getId());
+            pet.setId(petFound.getId());
+            pet.setUpdatedDate(LocalDateTime.now());
             return repository.savePet(pet);
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            throw new GeneralException("Error al actualizar la mascota");
         }
     }
 
     public Pet getById(Long id) {
-        return repository.findById(id);
+
+            Pet pet =  repository.findById(id);
+            if(pet == null){
+                throw new NoDataFoundException();
+            }
+            return pet;
     }
 
     public List<Pet> getAllPets() {
-        return repository.getAll();
+        try {
+            return repository.getAll();
+        } catch (Exception ex) {
+            throw new GeneralException("Error al obtener las mascotas");
+        }
     }
 }

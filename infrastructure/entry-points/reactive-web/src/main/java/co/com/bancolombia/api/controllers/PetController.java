@@ -11,10 +11,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/pet", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,11 +31,33 @@ public class PetController {
 
     @PostMapping
     public ResponseEntity<?> save(
-            @Valid @RequestBody PetDTO petDTO){
-        CreatePetRSDTO createPetRSDTO = responseMapper.toResponseFull(petUseCase.savePet(requestMapper.toModel(petDTO), petDTO.getIdClient()));
+            @Valid @RequestBody PetDTO petDTO) {
+        CreatePetRSDTO createPetRSDTO = responseMapper.toResponseFull(
+                petUseCase.savePet(requestMapper.toModel(petDTO), petDTO.getIdClient()));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(
-                        createPetRSDTO
-                );
+                .body(createPetRSDTO);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> update(
+            @Valid @RequestBody PetDTO petDTO) {
+        CreatePetRSDTO createPetRSDTO = responseMapper.toResponseFull(
+                petUseCase.updatedPet(requestMapper.toModel(petDTO), petDTO.getIdClient()));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(createPetRSDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        PetRSDTO petRSDTO = responseMapper.toResponse(petUseCase.getById(id));
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(petRSDTO);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?>  getAll() {
+        List<PetRSDTO> pets = responseMapper.toRSListPets(petUseCase.getAllPets());
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(pets);
     }
 }

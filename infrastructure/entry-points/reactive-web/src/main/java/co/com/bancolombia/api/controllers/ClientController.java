@@ -32,29 +32,21 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<?> save(
             @Valid @RequestBody ClientDTO clientDTO){
-        CreateClientRSDTO clientDTOR = responseMapper.toResponseFull(clientUseCase.saveClient(requestMapper.toModel(clientDTO)));
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(
-                        clientDTOR
-                );
+        CreateClientRSDTO clientDTOR = responseMapper.toResponseFull(clientUseCase
+                .saveClient(requestMapper.toModel(clientDTO)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientDTOR);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         ClientRSDTO clientDTOR = responseMapper.toResponse(clientUseCase.getById(id));
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(
-                        clientDTOR
-                );
+        return ResponseEntity.status(HttpStatus.FOUND).body(clientDTOR);
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getByAll() {
         List<ClientRSDTO> clientDTOR = responseMapper.toRSList(clientUseCase.getAllClients());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(
-                        clientDTOR
-                );
+        return ResponseEntity.status(HttpStatus.FOUND).body(clientDTOR);
     }
 
 }
