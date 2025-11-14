@@ -1,4 +1,6 @@
-package co.com.bancolombia.api.dto.response;
+package co.com.bancolombia.api.dto.response.models.pets;
+
+import co.com.bancolombia.api.dto.response.models.client.ClientRSDTO;
 
 import java.time.LocalDate;
 
