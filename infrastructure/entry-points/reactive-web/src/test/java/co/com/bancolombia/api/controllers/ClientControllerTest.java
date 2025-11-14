@@ -3,10 +3,9 @@ package co.com.bancolombia.api.controllers;
 import co.com.bancolombia.api.dto.mappers.RequestMapper;
 import co.com.bancolombia.api.dto.mappers.ResponseMapper;
 import co.com.bancolombia.api.dto.requests.ClientDTO;
-import co.com.bancolombia.api.dto.response.CreateClientRSDTO;
+import co.com.bancolombia.api.dto.response.models.client.CreateClientRSDTO;
 import co.com.bancolombia.model.client.Client;
 import co.com.bancolombia.usecase.client.ClientUseCase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -70,7 +69,7 @@ class ClientControllerTest {
         assertThat(result.getStatusCode()).isEqualTo(CREATED);
         assertThat(result.getBody()).isInstanceOf(CreateClientRSDTO.class);
         CreateClientRSDTO body = (CreateClientRSDTO) result.getBody();
-        Assertions.assertNotNull(body);
+        assertNotNull(body);
         assertThat(body.name()).isEqualTo("juan");
     }
 
