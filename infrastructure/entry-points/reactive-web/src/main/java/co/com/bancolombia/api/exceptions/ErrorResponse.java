@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 public record ErrorResponse(
-        int statusCode,
         Date timestamp,
         String message,
         String details,

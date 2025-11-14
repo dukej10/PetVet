@@ -11,7 +11,7 @@ public record ResponseDTO<T>(
 
 
     public ResponseDTO(T data, String message, int statusCode) {
-        this(data, message, 200, LocalDateTime.now());
+        this(data, message, statusCode, LocalDateTime.now());
     }
 }
 

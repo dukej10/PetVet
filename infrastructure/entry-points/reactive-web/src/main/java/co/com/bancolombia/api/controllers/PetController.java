@@ -1,10 +1,11 @@
 package co.com.bancolombia.api.controllers;
 
+import co.com.bancolombia.api.controllers.utils.Utility;
 import co.com.bancolombia.api.dto.mappers.RequestMapper;
 import co.com.bancolombia.api.dto.mappers.ResponseMapper;
 import co.com.bancolombia.api.dto.requests.PetDTO;
-import co.com.bancolombia.api.dto.response.CreatePetRSDTO;
-import co.com.bancolombia.api.dto.response.PetRSDTO;
+import co.com.bancolombia.api.dto.response.models.pets.CreatePetRSDTO;
+import co.com.bancolombia.api.dto.response.models.pets.PetRSDTO;
 import co.com.bancolombia.usecase.pet.PetUseCase;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class PetController {
         CreatePetRSDTO createPetRSDTO = responseMapper.toResponseFull(
                 petUseCase.savePet(requestMapper.toModel(petDTO), petDTO.getIdClient()));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(createPetRSDTO);
+                .body(Utility.structureRS(createPetRSDTO, HttpStatus.CREATED.value()));
     }
 
     @PutMapping
@@ -44,20 +45,20 @@ public class PetController {
         CreatePetRSDTO createPetRSDTO = responseMapper.toResponseFull(
                 petUseCase.updatedPet(requestMapper.toModel(petDTO), petDTO.getIdClient()));
         return ResponseEntity.status(HttpStatus.OK)
-                .body(createPetRSDTO);
+                .body(Utility.structureRS(createPetRSDTO, HttpStatus.CREATED.value()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         PetRSDTO petRSDTO = responseMapper.toResponse(petUseCase.getById(id));
         return ResponseEntity.status(HttpStatus.FOUND)
-                .body(petRSDTO);
+                .body(Utility.structureRS(petRSDTO, HttpStatus.CREATED.value()));
     }
 
     @GetMapping("/all")
     public ResponseEntity<?>  getAll() {
         List<PetRSDTO> pets = responseMapper.toRSListPets(petUseCase.getAllPets());
         return ResponseEntity.status(HttpStatus.FOUND)
-                .body(pets);
+                .body(Utility.structureRS(pets, HttpStatus.CREATED.value()));
     }
 }

@@ -1,10 +1,11 @@
 package co.com.bancolombia.api.controllers;
 
+import co.com.bancolombia.api.controllers.utils.Utility;
 import co.com.bancolombia.api.dto.mappers.RequestMapper;
 import co.com.bancolombia.api.dto.mappers.ResponseMapper;
 import co.com.bancolombia.api.dto.requests.ClientDTO;
-import co.com.bancolombia.api.dto.response.ClientRSDTO;
-import co.com.bancolombia.api.dto.response.CreateClientRSDTO;
+import co.com.bancolombia.api.dto.response.models.client.ClientRSDTO;
+import co.com.bancolombia.api.dto.response.models.client.CreateClientRSDTO;
 import co.com.bancolombia.usecase.client.ClientUseCase;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -34,19 +35,22 @@ public class ClientController {
             @Valid @RequestBody ClientDTO clientDTO){
         CreateClientRSDTO clientDTOR = responseMapper.toResponseFull(clientUseCase
                 .saveClient(requestMapper.toModel(clientDTO)));
-        return ResponseEntity.status(HttpStatus.CREATED).body(clientDTOR);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Utility.structureRS(clientDTOR, HttpStatus.CREATED.value()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         ClientRSDTO clientDTOR = responseMapper.toResponse(clientUseCase.getById(id));
-        return ResponseEntity.status(HttpStatus.FOUND).body(clientDTOR);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(Utility.structureRS(clientDTOR, HttpStatus.FOUND.value()));
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getByAll() {
-        List<ClientRSDTO> clientDTOR = responseMapper.toRSList(clientUseCase.getAllClients());
-        return ResponseEntity.status(HttpStatus.FOUND).body(clientDTOR);
+        List<ClientRSDTO> clientsDTOR = responseMapper.toRSList(clientUseCase.getAllClients());
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(Utility.structureRS(clientsDTOR, HttpStatus.FOUND.value()));
     }
 
 }

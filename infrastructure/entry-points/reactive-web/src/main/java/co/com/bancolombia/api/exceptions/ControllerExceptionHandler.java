@@ -1,5 +1,8 @@
 package co.com.bancolombia.api.exceptions;
 
+import co.com.bancolombia.api.controllers.utils.Utility;
+import co.com.bancolombia.api.dto.response.ResponseDTO;
+import co.com.bancolombia.model.exceptions.GeneralException;
 import co.com.bancolombia.model.exceptions.NoDataFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -38,19 +41,20 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toList());
 
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 "Validation failed",
                 request.getDescription(false),
                 fieldErrors
         );
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                Utility.structureRS(errorResponse,HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST);
     }
 
     // 🧩 Maneja errores de validación en parámetros o servicios
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<Map<String, Object>> handleValidationError(ConstraintViolationException exception) {
+    public ResponseEntity<Object> handleValidationError(ConstraintViolationException exception) {
         List<Map<String, String>> errors = exception.getConstraintViolations()
                 .stream()
                 .map(violation -> Map.of(
@@ -59,37 +63,41 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                         "error", violation.getMessage()))
                 .toList();
 
-        return ResponseEntity.badRequest().body(Map.of("errors", errors));
+        return ResponseEntity.badRequest().body(
+                Utility.structureRS(Map.of("errors", errors), HttpStatus.BAD_REQUEST.value())
+        );
     }
 
     // 3️⃣ Manejo de excepciones personalizadas
-    @ExceptionHandler({NoDataFoundException.class, NoDataFoundException.class})
-    public ResponseEntity<ErrorResponse> handleCustomException(
+    @ExceptionHandler({NoDataFoundException.class, GeneralException.class})
+    public ResponseEntity<ResponseDTO<ErrorResponse>> handleCustomException(
             RuntimeException ex, WebRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false),
                 null
         );
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(
+                Utility.structureRS(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // 4️⃣ Manejo de cualquier otra excepción global
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
+    public ResponseEntity<ResponseDTO<ErrorResponse>> handleGlobalException(Exception ex, WebRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false),
                 null
         );
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+                Utility.structureRS(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
