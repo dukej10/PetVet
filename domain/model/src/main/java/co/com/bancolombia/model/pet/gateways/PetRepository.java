@@ -13,4 +13,6 @@ public interface PetRepository {
     void deletePet (Long id);
 
     Pet findById(Long id);
+
+    Pet findPetWithMostAppointments();
 }

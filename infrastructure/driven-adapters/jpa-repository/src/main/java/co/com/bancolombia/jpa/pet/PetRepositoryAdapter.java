@@ -34,6 +34,11 @@ implements PetRepository
         if(Objects.isNull(pet)){
             repository.deleteById(id);
         }
+    }
 
+    @Override
+    public Pet findPetWithMostAppointments() {
+        PetData petData = repository.findPetWithMostAppointments();
+        return this.toEntity(petData);
     }
 }

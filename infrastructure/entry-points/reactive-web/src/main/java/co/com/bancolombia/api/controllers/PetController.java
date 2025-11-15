@@ -52,13 +52,20 @@ public class PetController {
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         PetRSDTO petRSDTO = responseMapper.toResponse(petUseCase.getById(id));
         return ResponseEntity.status(HttpStatus.FOUND)
-                .body(Utility.structureRS(petRSDTO, HttpStatus.CREATED.value()));
+                .body(Utility.structureRS(petRSDTO, HttpStatus.OK.value()));
     }
 
     @GetMapping("/all")
     public ResponseEntity<?>  getAll() {
         List<PetRSDTO> pets = responseMapper.toRSListPets(petUseCase.getAllPets());
         return ResponseEntity.status(HttpStatus.FOUND)
-                .body(Utility.structureRS(pets, HttpStatus.CREATED.value()));
+                .body(Utility.structureRS(pets, HttpStatus.OK.value()));
+    }
+
+    @GetMapping("/most-appointments")
+    public ResponseEntity<?>  getPet() {
+        PetRSDTO petRSDTO = responseMapper.toResponse(petUseCase.getPetWithMostAppointments());
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(Utility.structureRS(petRSDTO, HttpStatus.OK.value()));
     }
 }

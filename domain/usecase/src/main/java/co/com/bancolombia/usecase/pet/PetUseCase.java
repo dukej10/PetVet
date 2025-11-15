@@ -62,4 +62,12 @@ public class PetUseCase {
             throw new GeneralException("Error al obtener las mascotas");
         }
     }
+
+    public Pet getPetWithMostAppointments() {
+        try {
+            return repository.findPetWithMostAppointments();
+        } catch (Exception e) {
+            throw new GeneralException("Error al obtener la mascota");
+        }
+    }
 }
